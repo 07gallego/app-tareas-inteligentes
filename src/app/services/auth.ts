@@ -11,16 +11,15 @@ export class AuthService {
     password: '1234'
   };
 
-  login(username: string, password: string): boolean {
-    if (
-      username === this.mockUser.username &&
-      password === this.mockUser.password
-    ) {
-      localStorage.setItem(this.SESSION_KEY, JSON.stringify(this.mockUser));
-      return true;
-    }
-    return false;
+ login(username: string, password: string): boolean {
+  const users = this.getUsers();
+  const user = users.find((u: any) => u.username === username && u.password === password);
+  if (user) {
+    localStorage.setItem(this.SESSION_KEY, JSON.stringify(user));
+    return true;
   }
+  return false;
+}
 
   logout(): void {
     localStorage.removeItem(this.SESSION_KEY);
@@ -34,4 +33,22 @@ export class AuthService {
     const data = localStorage.getItem(this.SESSION_KEY);
     return data ? JSON.parse(data) : null;
   }
+
+  register(username: string, password: string): boolean {
+  const users = this.getUsers();
+  const exists = users.find(u => u.username === username);
+  if (exists) return false;
+  users.push({ id: Date.now().toString(), username, password });
+  localStorage.setItem('users', JSON.stringify(users));
+  return true;
+}
+
+private getUsers(): any[] {
+  const data = localStorage.getItem('users');
+  const users = data ? JSON.parse(data) : [];
+  if (users.length === 0) {
+    users.push(this.mockUser);
+  }
+  return users;
+}
 }

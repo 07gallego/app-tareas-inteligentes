@@ -38,6 +38,10 @@ export class LoginPage {
     }
   }
 
+  goToRegister() {
+    this.router.navigate(['/register']);
+  }
+
   private async showAlert(header: string, message: string) {
     const alert = await this.alertCtrl.create({
       header,

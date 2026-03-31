@@ -17,11 +17,11 @@
                   stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </div>
-        <h1 class="app-name">SmartTask App de Tareas Inteligente</h1>
-        <p class="app-subtitle">organiza, prioriza y cumple</p>
+        <h1 class="app-name">SmartTask</h1>
+        <p class="app-subtitle">crea tu cuenta</p>
       </div>
 
-      <h2 class="title">Iniciar sesión</h2>
+      <h2 class="title">Registro</h2>
 
       <!-- Usuario -->
       <ion-item lines="none" class="input-item">
@@ -45,14 +45,25 @@
         </ion-input>
       </ion-item>
 
-      <!-- Botón entrar -->
-      <ion-button expand="block" class="login-btn" (click)="onLogin()">
-        Entrar
+      <!-- Confirmar contraseña -->
+      <ion-item lines="none" class="input-item">
+        <ion-icon name="shield-checkmark-outline" slot="start" class="input-icon"></ion-icon>
+        <ion-input
+          [(ngModel)]="confirmPassword"
+          type="password"
+          placeholder="Confirmar contraseña"
+          clearInput="true">
+        </ion-input>
+      </ion-item>
+
+      <!-- Botón registrar -->
+      <ion-button expand="block" class="login-btn" (click)="onRegister()">
+        Crear cuenta
       </ion-button>
 
-      <!-- Botón registro -->
-      <ion-button expand="block" fill="outline" class="register-btn" (click)="goToRegister()">
-        Crear cuenta
+      <!-- Volver al login -->
+      <ion-button expand="block" fill="outline" class="register-btn" (click)="goToLogin()">
+        Ya tengo cuenta
       </ion-button>
 
     </div>

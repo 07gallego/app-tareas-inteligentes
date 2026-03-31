@@ -1,13 +1,105 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>tasks</ion-title>
-  </ion-toolbar>
-</ion-header>
+<ion-content>
+  <!-- Header -->
+  <div class="header">
+    <div class="header-row">
+      <span class="header-title">SmartTasks</span>
+      <div class="header-user">
+        <div class="avatar">{{ username.substring(0,2).toUpperCase() }}</div>
+        <span class="header-name">{{ username }}</span>
+        <ion-icon name="log-out-outline" class="logout-icon" (click)="logout()"></ion-icon>
+      </div>
+    </div>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">tasks</ion-title>
-    </ion-toolbar>
-  </ion-header>
+    <!-- Anillo de progreso -->
+    <div class="progress-ring-row">
+      <div class="ring-container">
+        <svg width="64" height="64" viewBox="0 0 64 64">
+          <circle cx="32" cy="32" r="26" fill="none" stroke="#7F77DD" stroke-width="6"/>
+          <circle cx="32" cy="32" r="26" fill="none" stroke="white"
+            stroke-width="6"
+            [attr.stroke-dashoffset]="getDashOffset()"
+            stroke-dasharray="163"
+            stroke-linecap="round"/>
+        </svg>
+        <div class="ring-label">{{ getProgress() }}%</div>
+      </div>
+
+      <div class="progress-stats">
+        <div class="stat-row">
+          <div class="stat-dot green"></div>
+          <span class="stat-text">{{ countByStatus('realizada') }} realizadas</span>
+        </div>
+
+        <div class="stat-row">
+          <div class="stat-dot yellow"></div>
+          <span class="stat-text">{{ countByStatus('en-curso') }} en curso</span>
+        </div>
+
+        <div class="stat-row">
+          <div class="stat-dot red"></div>
+          <span class="stat-text">{{ countByStatus('pendiente') }} pendientes</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Semanas -->
+  <div class="body">
+    <div class="weeks-scroll">
+      <div
+        *ngFor="let week of weeks; let i = index"
+        class="week-pill"
+        [class.active]="selectedWeek === i"
+        (click)="selectWeek(i)">
+        Sem {{ i + 1 }} · {{ week.startLabel }}
+      </div>
+    </div>
+
+    <div class="section-label">
+      {{ weeks[selectedWeek]?.startLabel }} — {{ weeks[selectedWeek]?.endLabel }}
+    </div>
+
+    <!-- Tareas -->
+    <div
+      *ngFor="let task of filteredTasks"
+      class="task-card"
+      [class.green]="task.status === 'realizada'"
+      [class.yellow]="task.status === 'en-curso'"
+      [class.red]="task.status === 'pendiente'">
+
+      <div class="check-box"
+           [class.green]="task.status === 'realizada'"
+           [class.yellow]="task.status === 'en-curso'"
+           [class.red]="task.status === 'pendiente'"
+           (click)="cycleStatus(task)">
+
+        <ion-icon
+          [name]="task.status === 'realizada' ? 'checkmark' : task.status === 'pendiente' ? 'close' : 'ellipse-outline'"
+          [style.color]="task.status === 'realizada' ? '#4CAF50' : task.status === 'pendiente' ? '#F44336' : '#FFC107'">
+        </ion-icon>
+
+      </div>
+
+      <div class="task-body">
+        <div class="task-name">{{ task.title }}</div>
+        <div class="task-meta">{{ task.estimatedTime }}</div>
+      </div>
+
+      <span class="task-status"
+        [class.status-green]="task.status === 'realizada'"
+        [class.status-yellow]="task.status === 'en-curso'"
+        [class.status-red]="task.status === 'pendiente'">
+        {{ task.status }}
+      </span>
+
+      <ion-icon name="trash-outline" class="delete-icon" (click)="deleteTask(task.id)"></ion-icon>
+    </div>
+
+    <div *ngIf="filteredTasks.length === 0" class="empty-state">
+      No hay tareas esta semana
+    </div>
+
+    <!-- Botón agregar -->
+    <div class="add-btn" (click)="addTask()">+ Nueva tarea</div>
+  </div>
 </ion-content>
