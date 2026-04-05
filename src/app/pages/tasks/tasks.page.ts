@@ -230,4 +230,12 @@ export class TasksPage implements OnInit {
     });
     await alert.present();
   }
+
+  isOverdue(task: Task): boolean {
+  if (task.status === 'realizada') return false;
+  const taskDate = new Date(task.createdAt);
+  taskDate.setHours(23, 59, 59, 999);
+  return taskDate < this.today;
+}
+
 }

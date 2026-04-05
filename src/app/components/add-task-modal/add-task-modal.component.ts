@@ -18,9 +18,14 @@ export class AddTaskModalComponent {
   estimatedTime = '';
   description = '';
   selectedDayIndex = 0;
-  priority: 'alta' | 'media' | 'baja' = 'media';      // 👈 nuevo
-  category = 'personal';                                 // 👈 nuevo
-  time = '';                                             // 👈 nuevo
+  priority: 'alta' | 'media' | 'baja' = 'media';
+  category = 'personal';
+  time = '';
+
+  hours: string[] = Array.from({ length: 24 }, (_, i) => {
+    const h = i.toString().padStart(2, '0');
+    return `${h}:00`;
+  });  // 👈 nuevo
 
   constructor(private modalCtrl: ModalController) {}
 
@@ -32,9 +37,9 @@ export class AddTaskModalComponent {
       estimatedTime: this.estimatedTime,
       description: this.description,
       date: this.days[this.selectedDayIndex].date,
-      priority: this.priority,     
-      category: this.category,       
-      time: this.time                
+      priority: this.priority,
+      category: this.category,
+      time: this.time
     });
   }
 

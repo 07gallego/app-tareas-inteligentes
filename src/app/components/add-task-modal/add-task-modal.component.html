@@ -28,17 +28,9 @@
   <!-- Hora -->
   <ion-item class="input-item">
     <ion-label>Hora</ion-label>
-    <ion-datetime-button datetime="time-picker"></ion-datetime-button>
-    <ion-modal [keepContentsMounted]="true">
-      <ng-template>
-        <ion-datetime
-          id="time-picker"
-          presentation="time"
-          [(ngModel)]="time"
-          locale="es-CO">
-        </ion-datetime>
-      </ng-template>
-    </ion-modal>
+    <ion-select [(ngModel)]="time" interface="popover" placeholder="Selecciona hora">
+      <ion-select-option *ngFor="let h of hours" [value]="h">{{ h }}</ion-select-option>
+    </ion-select>
   </ion-item>
 
   <!-- Prioridad -->

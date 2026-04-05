@@ -326,3 +326,18 @@ ion-content {
     grid-template-columns: repeat(4, 1fr);
   }
 }
+
+.task-card.overdue {
+  border-left: 3px solid #ff4444 !important;
+  background: #fff5f5;
+
+  .task-name { color: #C62828; }
+
+  animation: pulse-red 2s infinite;
+}
+
+@keyframes pulse-red {
+  0%   { box-shadow: 0 0 0 0 rgba(255, 68, 68, 0.3); }
+  70%  { box-shadow: 0 0 0 5px rgba(255, 68, 68, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(255, 68, 68, 0); }
+}
