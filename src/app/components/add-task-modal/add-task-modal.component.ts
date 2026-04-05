@@ -25,7 +25,7 @@ export class AddTaskModalComponent {
   hours: string[] = Array.from({ length: 24 }, (_, i) => {
     const h = i.toString().padStart(2, '0');
     return `${h}:00`;
-  });  // 👈 nuevo
+  });  
 
   constructor(private modalCtrl: ModalController) {}
 

@@ -43,16 +43,25 @@ export class AuthService {
     return true;
   }
 
+  changePassword(username: string, currentPassword: string, newPassword: string): boolean {
+    const users = this.getUsers();
+    const user = users.find(u => u.username === username && u.password === currentPassword);
+    if (!user) return false;
+    user.password = newPassword;
+    localStorage.setItem('users', JSON.stringify(users));
+    if (this.isLoggedIn()) {
+      localStorage.setItem(this.SESSION_KEY, JSON.stringify(user));
+    }
+    return true;
+  }  
+
   private getUsers(): any[] {
     const data = localStorage.getItem('users');
     let users = data ? JSON.parse(data) : [];
-
-    // 👇 Si no hay usuarios guardados, guarda el mockUser en localStorage
     if (users.length === 0) {
       users.push(this.mockUser);
-      localStorage.setItem('users', JSON.stringify(users)); 
+      localStorage.setItem('users', JSON.stringify(users));
     }
-
     return users;
   }
 }

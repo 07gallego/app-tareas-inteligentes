@@ -1,0 +1,74 @@
+ion-content {
+  --background: #F0EFF9;
+}
+
+.header {
+  background: #534AB7;
+  padding: 32px 16px 28px;
+  text-align: center;
+}
+
+.avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: #7F77DD;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 22px;
+  font-weight: 700;
+  margin: 0 auto 12px;
+}
+
+.username {
+  color: white;
+  font-size: 18px;
+  font-weight: 700;
+  margin: 0;
+}
+
+.subtitle {
+  color: #AFA9EC;
+  font-size: 12px;
+  margin: 4px 0 0;
+}
+
+.body {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.section {
+  background: white;
+  border-radius: 16px;
+  padding: 16px;
+  border: 0.5px solid #E0DEF5;
+}
+
+.section-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: #534AB7;
+  margin: 0 0 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+ion-item.input-item {
+  --background: #F7F6FF;
+  --border-radius: 12px;
+  --padding-start: 12px;
+  margin-bottom: 10px;
+  border-radius: 12px;
+}
+
+.save-btn {
+  --background: #534AB7;
+  --border-radius: 14px;
+  margin-top: 8px;
+  font-weight: 600;
+}

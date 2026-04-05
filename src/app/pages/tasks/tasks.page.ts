@@ -186,9 +186,9 @@ export class TasksPage implements OnInit {
         data.estimatedTime || '',
         data.description || '',
         data.date,
-        data.priority || 'media',     // 👈 nuevo
-        data.category || 'personal',  // 👈 nuevo
-        data.time || ''               // 👈 nuevo
+        data.priority || 'media',     
+        data.category || 'personal',  
+        data.time || ''               
       );
       this.loadTasks();
     }

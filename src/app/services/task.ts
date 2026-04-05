@@ -8,9 +8,9 @@ export interface Task {
   estimatedTime: string;
   status: 'pendiente' | 'faltante' | 'realizada';
   createdAt: Date;
-  priority: 'alta' | 'media' | 'baja';  // 👈 nuevo
-  category: string;                       // 👈 nuevo
-  time: string;                           // 👈 nuevo
+  priority: 'alta' | 'media' | 'baja';  
+  category: string;                       
+  time: string;                           
 }
 
 @Injectable({ providedIn: 'root' })
@@ -37,9 +37,9 @@ export class TaskService {
     estimatedTime: string,
     description: string,
     createdAt: Date,
-    priority: 'alta' | 'media' | 'baja' = 'media',  // 👈 nuevo
-    category: string = 'personal',                    // 👈 nuevo
-    time: string = ''                                 // 👈 nuevo
+    priority: 'alta' | 'media' | 'baja' = 'media',  
+    category: string = 'personal',                    
+    time: string = ''                                 
   ): void {
     const tasks = this.getTasks();
     tasks.push({
