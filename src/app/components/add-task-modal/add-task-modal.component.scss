@@ -1,0 +1,109 @@
+ion-toolbar {
+  --background: #534AB7;
+  --color: white;
+}
+
+ion-content {
+  --background: #F0EFF9;
+}
+
+/* INPUTS */
+ion-item {
+  --background: white;
+  --border-radius: 12px;
+  --padding-start: 12px;
+  --inner-padding-end: 12px;
+  margin-bottom: 12px;
+  border-radius: 12px;
+  --color: #000; /*importante */
+}
+
+/* TEXTO VISIBLE */
+ion-input, 
+ion-textarea, 
+ion-select {
+  --color: #000 !important;
+  color: #000 !important;
+  font-size: 14px;
+}
+
+/* TEXTO INTERNO REAL (fix definitivo) */
+ion-input::part(native),
+ion-textarea::part(native) {
+  color: #000 !important;
+}
+
+/* fallback */
+input, textarea {
+  color: #000 !important;
+}
+
+/* LABEL DE DÍAS */
+.day-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #534AB7;
+  margin: 16px 0 10px;
+}
+
+/*GRID DE DÍAS */
+.days-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+/* BOTONES DE DÍA */
+.day-pill {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 8px 4px;
+  border-radius: 12px;
+  background: white;
+  border: 1px solid #E0DEF5;
+  cursor: pointer;
+  transition: 0.2s ease;
+
+  &:hover {
+    transform: scale(1.05);
+  }
+
+  &.active {
+    background: #534AB7;
+    border-color: #534AB7;
+
+    .day-pill-name { color: white; }
+    .day-pill-number { color: white; }
+  }
+}
+
+.day-pill-name {
+  font-size: 10px;
+  color: #888;
+  text-transform: uppercase;
+}
+
+.day-pill-number {
+  font-size: 16px;
+  font-weight: 700;
+  color: #534AB7;
+}
+
+/* BOTÓN GUARDAR */
+.confirm-btn {
+  --background: #534AB7;
+  --border-radius: 14px;
+  --padding-top: 14px;
+  --padding-bottom: 14px;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+/* BOTÓN CANCELAR */
+ion-button[color="medium"] {
+  --background: #ccc;
+  --color: #000;
+  --border-radius: 14px;
+}

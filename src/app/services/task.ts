@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { AuthService } from './auth';
 
 export interface Task {
   id: string;
@@ -7,42 +8,53 @@ export interface Task {
   estimatedTime: string;
   status: 'pendiente' | 'faltante' | 'realizada';
   createdAt: Date;
+  priority: 'alta' | 'media' | 'baja';  // 👈 nuevo
+  category: string;                       // 👈 nuevo
+  time: string;                           // 👈 nuevo
 }
 
 @Injectable({ providedIn: 'root' })
 export class TaskService {
 
-  private readonly TASKS_KEY = 'tasks';
+  constructor(private authService: AuthService) {}
+
+  private getKey(): string {
+    const user = this.authService.getCurrentUser();
+    return user ? `tasks_${user.username}` : 'tasks_guest';
+  }
 
   getTasks(): Task[] {
-    const data = localStorage.getItem(this.TASKS_KEY);
+    const data = localStorage.getItem(this.getKey());
     return data ? JSON.parse(data) : [];
   }
 
   saveTasks(tasks: Task[]): void {
-    localStorage.setItem(this.TASKS_KEY, JSON.stringify(tasks));
+    localStorage.setItem(this.getKey(), JSON.stringify(tasks));
   }
 
   addTask(
-  title: string,
-  estimatedTime: string,
-  description: string,
-  createdAt: Date
-): void {
-
-  const tasks = this.getTasks();
-
-  tasks.push({
-    id: Date.now().toString(),
-    title,
-    description, // ✅ ahora sí guarda descripción
-    estimatedTime,
-    status: 'pendiente',
-    createdAt 
-  });
-
-  this.saveTasks(tasks);
-}
+    title: string,
+    estimatedTime: string,
+    description: string,
+    createdAt: Date,
+    priority: 'alta' | 'media' | 'baja' = 'media',  // 👈 nuevo
+    category: string = 'personal',                    // 👈 nuevo
+    time: string = ''                                 // 👈 nuevo
+  ): void {
+    const tasks = this.getTasks();
+    tasks.push({
+      id: Date.now().toString(),
+      title,
+      description,
+      estimatedTime,
+      status: 'pendiente',
+      createdAt,
+      priority,  
+      category,  
+      time       
+    });
+    this.saveTasks(tasks);
+  }
 
   updateStatus(id: string, status: Task['status']): void {
     const tasks = this.getTasks();

@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { IonicModule, AlertController } from '@ionic/angular';
+import { IonicModule, AlertController, ModalController } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TaskService, Task } from '../../services/task';
 import { AuthService } from '../../services/auth';
+import { AddTaskModalComponent } from '../../components/add-task-modal/add-task-modal.component';
 
 interface Week {
   startDate: Date;
@@ -27,15 +28,15 @@ export class TasksPage implements OnInit {
   selectedWeek = 0;
   username = '';
   weeks: Week[] = [];
-
-  // 🔥 para expandir tareas
   expandedTaskId: string | null = null;
+  today = new Date();
 
   constructor(
     private taskService: TaskService,
     private authService: AuthService,
     private router: Router,
-    private alertCtrl: AlertController
+    private alertCtrl: AlertController,
+    private modalCtrl: ModalController
   ) {}
 
   ngOnInit() {
@@ -96,7 +97,6 @@ export class TasksPage implements OnInit {
 
   getProgress(): number {
     if (this.filteredTasks.length === 0) return 0;
-
     return Math.round(
       (this.filteredTasks.filter(t => t.status === 'realizada').length /
         this.filteredTasks.length) * 100
@@ -113,78 +113,87 @@ export class TasksPage implements OnInit {
 
   countByStatusAndWeek(weekIndex: number, status: string): number {
     const week = this.weeks[weekIndex];
-
     return this.taskService.getTasks().filter(t => {
       const date = new Date(t.createdAt);
-      return t.status === status && date >= week.startDate && date <= week.endDate;
+      return t.status === status &&
+             date >= week.startDate &&
+             date <= week.endDate;
     }).length;
   }
 
-  // 🔥 expandir / cerrar tarea
+  isToday(date: Date): boolean {
+    return date.toDateString() === this.today.toDateString();
+  }
+
+  getDaysOfWeek(week: Week) {
+    const days = [];
+    const start = new Date(week.startDate);
+
+    for (let i = 0; i < 7; i++) {
+      const day = new Date(start);
+      day.setDate(start.getDate() + i);
+      days.push({
+        date: day,
+        label: day.toLocaleDateString('es-CO', { weekday: 'short' }),
+        dayNumber: day.getDate()
+      });
+    }
+
+    return days;
+  }
+
+  getTasksByDay(date: Date) {
+    return this.filteredTasks.filter(t => {
+      const taskDate = new Date(t.createdAt);
+      return taskDate.toDateString() === date.toDateString();
+    });
+  }
+
+  hasStatusInDay(date: Date, status: string): boolean {
+    return this.getTasksByDay(date).some(t => t.status === status);
+  }
+
   toggleTask(task: Task) {
     this.expandedTaskId = this.expandedTaskId === task.id ? null : task.id;
   }
 
-  // 🔁 cambiar estado
   cycleStatus(task: Task) {
     const next: Record<Task['status'], Task['status']> = {
       pendiente: 'realizada',
       realizada: 'faltante',
       faltante: 'pendiente'
     };
-
     this.taskService.updateStatus(task.id, next[task.status]);
     this.loadTasks();
   }
 
-  // Método para  agregar tarea con descripción
   async addTask() {
-  const week = this.weeks[this.selectedWeek];
-  const days = this.getDaysOfWeek(week);
+    const week = this.weeks[this.selectedWeek];
+    const days = this.getDaysOfWeek(week);
 
-  const alert = await this.alertCtrl.create({
-    header: 'Nueva tarea',
-    inputs: [
-      { name: 'title', type: 'text' as const, placeholder: 'Título de la tarea' },
-      { name: 'estimatedTime', type: 'text' as const, placeholder: 'Ej: 1h 30min' },
-      { name: 'description', type: 'textarea' as const, placeholder: 'Descripción' },
+    const modal = await this.modalCtrl.create({
+      component: AddTaskModalComponent,
+      componentProps: { days }
+    });
 
-      
-      ...days.map((d, index) => ({
-        name: 'day',
-        type: 'radio' as const,
-        label: `${d.label} ${d.dayNumber}`,
-        value: index,
-        checked: index === 0
-      }))
-    ],
+    await modal.present();
 
-    buttons: [
-      { text: 'Cancelar', role: 'cancel' },
-      {
-        text: 'Agregar',
-        handler: (data) => {
-          if (data.title) {
+    const { data } = await modal.onDidDismiss();
 
-            const selectedDay = days[data.day];
-            const taskDate = new Date(selectedDay.date);
+    if (data) {
+      this.taskService.addTask(
+        data.title,
+        data.estimatedTime || '',
+        data.description || '',
+        data.date,
+        data.priority || 'media',     // 👈 nuevo
+        data.category || 'personal',  // 👈 nuevo
+        data.time || ''               // 👈 nuevo
+      );
+      this.loadTasks();
+    }
+  }
 
-            this.taskService.addTask(
-              data.title,
-              data.estimatedTime || '',
-              data.description || '',
-              taskDate
-            );
-
-            this.loadTasks();
-          }
-        }
-      }
-    ]
-  });
-
-  await alert.present();
-}
   async deleteTask(id: string) {
     const alert = await this.alertCtrl.create({
       header: '¿Eliminar tarea?',
@@ -201,38 +210,24 @@ export class TasksPage implements OnInit {
         }
       ]
     });
-
     await alert.present();
   }
 
-  logout() {
-    this.authService.logout();
-    this.router.navigate(['/login'], { replaceUrl: true });
-  }
-
-  getDaysOfWeek(week: Week) {
-  const days = [];
-  const start = new Date(week.startDate);
-
-  for (let i = 0; i < 7; i++) {
-    const day = new Date(start);
-    day.setDate(start.getDate() + i);
-
-    days.push({
-      date: day,
-      label: day.toLocaleDateString('es-CO', { weekday: 'short' }),
-      dayNumber: day.getDate()
+  async ListenerHeader() {
+    const alert = await this.alertCtrl.create({
+      header: 'Cerrar Sesión',
+      message: '¿Está seguro?',
+      buttons: [
+        { text: 'Cancelar', role: 'cancel' },
+        {
+          text: 'OK',
+          handler: () => {
+            this.authService.logout();
+            this.router.navigate(['/login'], { replaceUrl: true });
+          }
+        }
+      ]
     });
+    await alert.present();
   }
-
-  return days;
-}
-
-getTasksByDay(date: Date) {
-  return this.filteredTasks.filter(t => {
-    const taskDate = new Date(t.createdAt);
-    return taskDate.toDateString() === date.toDateString();
-  });
-}
-
 }

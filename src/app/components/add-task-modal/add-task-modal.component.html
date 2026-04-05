@@ -1,0 +1,71 @@
+<ion-content class="modal-content">
+
+  <div class="modal-header">
+    <h2>Nueva tarea</h2>
+  </div>
+
+  <ion-item class="input-item">
+    <ion-input [(ngModel)]="title" placeholder="Título"></ion-input>
+  </ion-item>
+
+  <ion-item class="input-item">
+    <ion-input [(ngModel)]="estimatedTime" placeholder="Tiempo estimado (ej: 30 min)"></ion-input>
+  </ion-item>
+
+  <ion-item class="input-item">
+    <ion-textarea [(ngModel)]="description" placeholder="Descripción"></ion-textarea>
+  </ion-item>
+
+  <!-- Día -->
+  <ion-item class="input-item">
+    <ion-select [(ngModel)]="selectedDayIndex" interface="popover" placeholder="Selecciona día">
+      <ion-select-option *ngFor="let d of days; let i = index" [value]="i">
+        {{ d.label }} {{ d.dayNumber }}
+      </ion-select-option>
+    </ion-select>
+  </ion-item>
+
+  <!-- Hora -->
+  <ion-item class="input-item">
+    <ion-label>Hora</ion-label>
+    <ion-datetime-button datetime="time-picker"></ion-datetime-button>
+    <ion-modal [keepContentsMounted]="true">
+      <ng-template>
+        <ion-datetime
+          id="time-picker"
+          presentation="time"
+          [(ngModel)]="time"
+          locale="es-CO">
+        </ion-datetime>
+      </ng-template>
+    </ion-modal>
+  </ion-item>
+
+  <!-- Prioridad -->
+  <ion-item class="input-item">
+    <ion-label>Prioridad</ion-label>
+    <ion-select [(ngModel)]="priority" interface="popover">
+      <ion-select-option value="alta">🔴 Alta</ion-select-option>
+      <ion-select-option value="media">🟡 Media</ion-select-option>
+      <ion-select-option value="baja">🟢 Baja</ion-select-option>
+    </ion-select>
+  </ion-item>
+
+  <!-- Categoría -->
+  <ion-item class="input-item">
+    <ion-label>Categoría</ion-label>
+    <ion-select [(ngModel)]="category" interface="popover">
+      <ion-select-option value="personal">👤 Personal</ion-select-option>
+      <ion-select-option value="trabajo">💼 Trabajo</ion-select-option>
+      <ion-select-option value="estudio">📚 Estudio</ion-select-option>
+      <ion-select-option value="salud">❤️ Salud</ion-select-option>
+      <ion-select-option value="hogar">🏠 Hogar</ion-select-option>
+    </ion-select>
+  </ion-item>
+
+  <div class="modal-buttons">
+    <ion-button expand="block" color="medium" (click)="cancel()">Cancelar</ion-button>
+    <ion-button expand="block" (click)="confirm()">Guardar</ion-button>
+  </div>
+
+</ion-content>

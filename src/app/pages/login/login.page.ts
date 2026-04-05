@@ -24,19 +24,23 @@ export class LoginPage {
   ) {}
 
   async onLogin() {
-    if (!this.username || !this.password) {
-      await this.showAlert('Campos requeridos', 'Por favor completa usuario y contraseña.');
-      return;
-    }
+  console.log('1. username:', this.username);
+  console.log('2. password:', this.password);
 
-    const success = this.authService.login(this.username, this.password);
-
-    if (success) {
-      this.router.navigate(['/tasks'], { replaceUrl: true });
-    } else {
-      await this.showAlert('Error', 'Usuario o contraseña incorrectos.');
-    }
+  if (!this.username || !this.password) {
+    await this.showAlert('Campos requeridos', 'Por favor completa usuario y contraseña.');
+    return;
   }
+
+  const success = this.authService.login(this.username, this.password);
+  console.log('3. login result:', success);
+
+  if (success) {
+    this.router.navigate(['/tabs/tasks'], { replaceUrl: true });
+  } else {
+    await this.showAlert('Error', 'Usuario o contraseña incorrectos.');
+  }
+}
 
   goToRegister() {
     this.router.navigate(['/register']);
