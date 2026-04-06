@@ -8,9 +8,9 @@ export interface Task {
   estimatedTime: string;
   status: 'pendiente' | 'faltante' | 'realizada';
   createdAt: Date;
-  priority: 'alta' | 'media' | 'baja';  
-  category: string;                       
-  time: string;                           
+  priority: 'alta' | 'media' | 'baja';
+  category: string;
+  time: string;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -37,9 +37,9 @@ export class TaskService {
     estimatedTime: string,
     description: string,
     createdAt: Date,
-    priority: 'alta' | 'media' | 'baja' = 'media',  
-    category: string = 'personal',                    
-    time: string = ''                                 
+    priority: 'alta' | 'media' | 'baja' = 'media',
+    category: string = 'personal',
+    time: string = ''
   ): void {
     const tasks = this.getTasks();
     tasks.push({
@@ -49,12 +49,21 @@ export class TaskService {
       estimatedTime,
       status: 'pendiente',
       createdAt,
-      priority,  
-      category,  
-      time       
+      priority,
+      category,
+      time
     });
     this.saveTasks(tasks);
   }
+
+  updateTask(id: string, data: Partial<Task>): void {
+    const tasks = this.getTasks();
+    const index = tasks.findIndex(t => t.id === id);
+    if (index !== -1) {
+      tasks[index] = { ...tasks[index], ...data };
+      this.saveTasks(tasks);
+    }
+  }  
 
   updateStatus(id: string, status: Task['status']): void {
     const tasks = this.getTasks();

@@ -186,13 +186,44 @@ export class TasksPage implements OnInit {
         data.estimatedTime || '',
         data.description || '',
         data.date,
-        data.priority || 'media',     
-        data.category || 'personal',  
-        data.time || ''               
+        data.priority || 'media',
+        data.category || 'personal',
+        data.time || ''
       );
       this.loadTasks();
     }
   }
+
+  async editTask(task: Task) {
+    const week = this.weeks[this.selectedWeek];
+    const days = this.getDaysOfWeek(week);
+
+    const modal = await this.modalCtrl.create({
+      component: AddTaskModalComponent,
+      componentProps: {
+        days,
+        editMode: true,
+        taskData: task
+      }
+    });
+
+    await modal.present();
+
+    const { data } = await modal.onDidDismiss();
+
+    if (data) {
+      this.taskService.updateTask(task.id, {
+        title: data.title,
+        estimatedTime: data.estimatedTime || '',
+        description: data.description || '',
+        priority: data.priority || 'media',
+        category: data.category || 'personal',
+        time: data.time || '',
+        status: data.status || task.status
+      });
+      this.loadTasks();
+    }
+  }  
 
   async deleteTask(id: string) {
     const alert = await this.alertCtrl.create({
@@ -232,10 +263,9 @@ export class TasksPage implements OnInit {
   }
 
   isOverdue(task: Task): boolean {
-  if (task.status === 'realizada') return false;
-  const taskDate = new Date(task.createdAt);
-  taskDate.setHours(23, 59, 59, 999);
-  return taskDate < this.today;
-}
-
+    if (task.status === 'realizada') return false;
+    const taskDate = new Date(task.createdAt);
+    taskDate.setHours(23, 59, 59, 999);
+    return taskDate < this.today;
+  }
 }

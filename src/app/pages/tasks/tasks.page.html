@@ -77,7 +77,6 @@
 
       <div class="folder-body" *ngIf="selectedWeek === i">
 
-        <!-- CALENDARIO -->
         <div class="calendar-grid">
 
           <div class="calendar-day"
@@ -89,14 +88,12 @@
               <span class="day-number">{{ day.dayNumber }}</span>
             </div>
 
-            <!-- DOTS  -->
             <div class="day-dots">
               <span class="dot green" *ngIf="hasStatusInDay(day.date, 'realizada')"></span>
               <span class="dot yellow" *ngIf="hasStatusInDay(day.date, 'pendiente')"></span>
               <span class="dot red" *ngIf="hasStatusInDay(day.date, 'faltante')"></span>
             </div>
 
-            <!--  TAREAS -->
             <div *ngFor="let task of getTasksByDay(day.date)"
                  class="task-card"
                  (click)="toggleTask(task)"
@@ -118,6 +115,12 @@
               <div class="task-body">
                 <div class="task-name">{{ task.title }}</div>
               </div>
+
+              <!-- botón editar -->
+              <ion-icon name="create-outline"
+                class="edit-icon"
+                (click)="editTask(task); $event.stopPropagation()">
+              </ion-icon>
 
               <ion-icon name="trash-outline"
                 class="delete-icon"

@@ -1,7 +1,7 @@
 <ion-content class="modal-content">
 
   <div class="modal-header">
-    <h2>Nueva tarea</h2>
+    <h2>{{ editMode ? 'Editar tarea' : 'Nueva tarea' }}</h2>
   </div>
 
   <ion-item class="input-item">
@@ -52,6 +52,16 @@
       <ion-select-option value="estudio">📚 Estudio</ion-select-option>
       <ion-select-option value="salud">❤️ Salud</ion-select-option>
       <ion-select-option value="hogar">🏠 Hogar</ion-select-option>
+    </ion-select>
+  </ion-item>
+
+  <!-- Estado (solo en edición) -->
+  <ion-item class="input-item" *ngIf="editMode">
+    <ion-label>Estado</ion-label>
+    <ion-select [(ngModel)]="status" interface="popover">
+      <ion-select-option value="pendiente">🟡 Pendiente</ion-select-option>
+      <ion-select-option value="realizada">🟢 Realizada</ion-select-option>
+      <ion-select-option value="faltante">🔴 Faltante</ion-select-option>
     </ion-select>
   </ion-item>
 
