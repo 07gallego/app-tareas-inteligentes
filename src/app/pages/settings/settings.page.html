@@ -53,6 +53,24 @@
       </ion-button>
     </div>
 
+    <!-- Mis tareas -->
+<div class="section">
+  <p class="section-title">Mis tareas ({{ tasks.length }})</p>
+
+  <div *ngIf="tasks.length === 0" class="empty-tasks">
+    No tienes tareas aún
+  </div>
+
+  <div *ngFor="let task of tasks" class="task-item">
+    <div class="task-dot" [class]="task.status"></div>
+    <div class="task-info">
+      <div class="task-title">{{ task.title }}</div>
+      <div class="task-date">{{ formatDate(task.createdAt) }}</div>
+    </div>
+    <span class="task-badge" [class]="task.status">{{ task.status }}</span>
+  </div>
+</div>
+
   </div>
 
 </ion-content>

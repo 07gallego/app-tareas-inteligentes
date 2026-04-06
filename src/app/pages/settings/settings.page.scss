@@ -62,8 +62,16 @@ ion-item.input-item {
   --background: #F7F6FF;
   --border-radius: 12px;
   --padding-start: 12px;
+  --color: #2C2C2A;           // 👈 color letras input
   margin-bottom: 10px;
   border-radius: 12px;
+
+  ion-icon { color: #534AB7; } // 👈 color iconos
+}
+
+ion-input {
+  --color: #2C2C2A !important;         // 👈 texto input
+  --placeholder-color: #888 !important;
 }
 
 .save-btn {
@@ -71,4 +79,62 @@ ion-item.input-item {
   --border-radius: 14px;
   margin-top: 8px;
   font-weight: 600;
+}
+
+// Tareas del usuario
+.task-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 0;
+  border-bottom: 0.5px solid #F0EFF9;
+
+  &:last-child { border-bottom: none; }
+}
+
+.task-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+
+  &.pendiente  { background: #FFC107; }
+  &.realizada  { background: #4CAF50; }
+  &.faltante   { background: #F44336; }
+}
+
+.task-info { flex: 1; }
+
+.task-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: #2C2C2A;
+}
+
+.task-date {
+  font-size: 11px;
+  color: #888;
+  margin-top: 2px;
+}
+
+.task-badge {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 10px;
+
+  &.pendiente  { background: #FFF8E1; color: #F57F17; }
+  &.realizada  { background: #E8F5E9; color: #2E7D32; }
+  &.faltante   { background: #FFEBEE; color: #C62828; }
+}
+
+.empty-tasks {
+  text-align: center;
+  color: #888;
+  font-size: 13px;
+  padding: 16px 0;
+}
+
+ion-content {
+  --padding-bottom: 80px;
 }

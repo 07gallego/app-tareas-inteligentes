@@ -1,13 +1,59 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>calendar</ion-title>
-  </ion-toolbar>
-</ion-header>
+<ion-content [fullscreen]="true" class="ion-no-padding">
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">calendar</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  <!-- Header -->
+  <div class="cal-header">
+    <div class="month-nav">
+      <ion-icon name="chevron-back-outline" (click)="prevMonth()"></ion-icon>
+      <span class="month-title">{{ monthNames[currentMonth] }} {{ currentYear }}</span>
+      <ion-icon name="chevron-forward-outline" (click)="nextMonth()"></ion-icon>
+    </div>
+  </div>
+
+  <!-- Días de la semana -->
+  <div class="day-names">
+    <span *ngFor="let d of dayNames">{{ d }}</span>
+  </div>
+
+  <!-- Grid del mes -->
+  <div class="cal-grid">
+    <div *ngFor="let day of calendarDays"
+         class="cal-cell"
+         [class.today]="isToday(day)"
+         [class.selected]="isSelected(day)"
+         [class.empty]="!day"
+         (click)="day && selectDate(day)">
+
+      <span class="day-num" *ngIf="day">{{ day.getDate() }}</span>
+      <span class="task-dot" *ngIf="day && hasTask(day)"></span>
+    </div>
+  </div>
+
+  <!-- Tareas del día seleccionado -->
+  <div class="tasks-section">
+    <p class="tasks-title" *ngIf="selectedDate">
+      Tareas del {{ selectedDate.getDate() }} de {{ monthNames[selectedDate.getMonth()] }}
+    </p>
+
+    <div *ngIf="tasksOfDay.length === 0" class="empty-state">
+      Sin tareas este día
+    </div>
+
+    <div *ngFor="let task of tasksOfDay" class="task-card">
+      <div class="task-left">
+        <div class="status-dot" [style.background]="getStatusColor(task.status)"></div>
+        <div class="task-info">
+          <div class="task-title">{{ task.title }}</div>
+          <div class="task-meta">
+            <span *ngIf="task.time">🕐 {{ task.time }}</span>
+            <span *ngIf="task.priority" class="priority" [class]="task.priority">
+              {{ task.priority }}
+            </span>
+            <span *ngIf="task.category" class="category">{{ task.category }}</span>
+          </div>
+        </div>
+      </div>
+      <span class="badge" [class]="task.status">{{ task.status }}</span>
+    </div>
+  </div>
+
 </ion-content>
