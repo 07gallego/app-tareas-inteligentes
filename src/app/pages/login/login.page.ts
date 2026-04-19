@@ -16,6 +16,7 @@ export class LoginPage {
 
   username = '';
   password = '';
+  isLoading = false;
 
   constructor(
     private authService: AuthService,
@@ -24,26 +25,57 @@ export class LoginPage {
   ) {}
 
   async onLogin() {
-  console.log('1. username:', this.username);
-  console.log('2. password:', this.password);
+    if (!this.username?.trim() || !this.password?.trim()) {
+      await this.showAlert('Campos requeridos', 'Por favor completa usuario y contraseña.');
+      return;
+    }
 
-  if (!this.username || !this.password) {
-    await this.showAlert('Campos requeridos', 'Por favor completa usuario y contraseña.');
-    return;
+    this.isLoading = true;
+    const success = this.authService.login(this.username.trim(), this.password);
+    this.isLoading = false;
+
+    if (success) {
+      this.router.navigate(['/tabs/tasks'], { replaceUrl: true });
+    } else {
+      await this.showAlert('Error', 'Usuario o contraseña incorrectos.');
+    }
   }
 
-  const success = this.authService.login(this.username, this.password);
-  console.log('3. login result:', success);
-
-  if (success) {
-    this.router.navigate(['/tabs/tasks'], { replaceUrl: true });
-  } else {
-    await this.showAlert('Error', 'Usuario o contraseña incorrectos.');
-  }
-}
-
-  goToRegister() {
-    this.router.navigate(['/register']);
+  async goToRegister() {
+    // Registro rápido directo desde el login (sin navegar)
+    const alert = await this.alertCtrl.create({
+      header: 'Crear cuenta',
+      inputs: [
+        {
+          name: 'username',
+          type: 'text',
+          placeholder: 'Usuario',
+          attributes: { autocomplete: 'off' }
+        },
+        {
+          name: 'password',
+          type: 'password',
+          placeholder: 'Contraseña (mín. 4 caracteres)'
+        }
+      ],
+      buttons: [
+        { text: 'Cancelar', role: 'cancel' },
+        {
+          text: 'Registrarme',
+          handler: async (data) => {
+            const result = this.authService.register(data.username, data.password);
+            if (result.ok) {
+              await this.showAlert('¡Listo!', result.msg);
+            } else {
+              await this.showAlert('No se pudo crear', result.msg);
+              return false; // mantiene el alert abierto
+            }
+            return true;
+          }
+        }
+      ]
+    });
+    await alert.present();
   }
 
   private async showAlert(header: string, message: string) {

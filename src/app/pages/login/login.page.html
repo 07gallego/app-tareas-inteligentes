@@ -5,23 +5,13 @@
       <!-- Logo -->
       <div class="avatar-container">
         <div class="logo-icon">
-          <svg width="44" height="44" viewBox="0 0 44 44">
-            <rect x="8" y="10" width="18" height="3" rx="1.5" fill="white" opacity="0.9"/>
-            <rect x="8" y="18" width="24" height="3" rx="1.5" fill="white" opacity="0.9"/>
-            <rect x="8" y="26" width="14" height="3" rx="1.5" fill="white" opacity="0.9"/>
-            <circle cx="5" cy="11.5" r="2.5" fill="white" opacity="0.9"/>
-            <circle cx="5" cy="19.5" r="2.5" fill="white" opacity="0.9"/>
-            <circle cx="5" cy="27.5" r="2.5" fill="white" opacity="0.9"/>
-            <circle cx="34" cy="30" r="8" fill="#AFA9EC"/>
-            <path d="M30 30 L33 33 L39 26" fill="none" stroke="white"
-                  stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
+          <img src="assets/icon/favicon1.png" width="72" height="72" />
         </div>
-        <h1 class="app-name">SmartTask App de Tareas Inteligente</h1>
+        <h1 class="app-name">SmartTask</h1>
         <p class="app-subtitle">organiza, prioriza y cumple</p>
       </div>
 
-      <h2 class="title">Iniciar sesión</h2>
+      <h2 class="title">Inicio de sesión</h2>
 
       <!-- Usuario -->
       <ion-item lines="none" class="input-item">
@@ -30,7 +20,8 @@
           [(ngModel)]="username"
           type="text"
           placeholder="Usuario"
-          clearInput="true">
+          clearInput="true"
+          (keyup.enter)="onLogin()">
         </ion-input>
       </ion-item>
 
@@ -41,17 +32,29 @@
           [(ngModel)]="password"
           type="password"
           placeholder="Contraseña"
-          clearInput="true">
+          clearInput="true"
+          (keyup.enter)="onLogin()">
         </ion-input>
       </ion-item>
 
       <!-- Botón entrar -->
-      <ion-button expand="block" class="login-btn" (click)="onLogin()">
-        Entrar
+      <ion-button
+        expand="block"
+        class="login-btn"
+        (click)="onLogin()"
+        [disabled]="isLoading">
+        <ion-spinner *ngIf="isLoading" name="crescent" slot="start"></ion-spinner>
+        <span *ngIf="!isLoading">Entrar</span>
+        <span *ngIf="isLoading">Ingresando...</span>
       </ion-button>
 
       <!-- Botón registro -->
-      <ion-button expand="block" fill="outline" class="register-btn" (click)="goToRegister()">
+      <ion-button
+        expand="block"
+        fill="outline"
+        class="register-btn"
+        (click)="goToRegister()"
+        [disabled]="isLoading">
         Crear cuenta
       </ion-button>
 

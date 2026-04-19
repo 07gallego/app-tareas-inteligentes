@@ -313,7 +313,16 @@ ion-content {
   text-align: center;
   color: #888;
   font-size: 13px;
-  padding: 20px 0;
+  padding: 24px 0;
+
+  ion-icon {
+    font-size: 32px;
+    color: #ccc;
+    display: block;
+    margin-bottom: 8px;
+  }
+
+  p { margin: 0; }
 }
 
 .add-btn {
@@ -347,4 +356,37 @@ ion-content {
   0%   { box-shadow: 0 0 0 0 rgba(255, 68, 68, 0.3); }
   70%  { box-shadow: 0 0 0 5px rgba(255, 68, 68, 0); }
   100% { box-shadow: 0 0 0 0 rgba(255, 68, 68, 0); }
+}
+
+/* ─── Filtros por estado ─────────────────────────────────── */
+.filter-bar {
+  display: flex;
+  gap: 6px;
+  margin-top: 14px;
+  overflow-x: auto;
+  padding-bottom: 2px;
+
+  &::-webkit-scrollbar { display: none; }
+}
+
+.filter-btn {
+  flex-shrink: 0;
+  border: none;
+  border-radius: 20px;
+  padding: 6px 14px;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  background: rgba(255,255,255,0.15);
+  color: white;
+  transition: all 0.2s ease;
+
+  &.active {
+    background: white;
+    color: #534AB7;
+  }
+
+  &.yellow.active { color: #F57F17; }
+  &.green.active  { color: #2E7D32; }
+  &.red.active    { color: #C62828; }
 }

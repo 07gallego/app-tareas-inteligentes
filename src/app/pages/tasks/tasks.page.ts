@@ -31,6 +31,9 @@ export class TasksPage implements OnInit {
   expandedTaskId: string | null = null;
   today = new Date();
 
+  // ─── Filtro por estado ───────────────────────────────────
+  activeFilter: 'todas' | 'pendiente' | 'realizada' | 'faltante' = 'todas';
+
   constructor(
     private taskService: TaskService,
     private authService: AuthService,
@@ -85,21 +88,40 @@ export class TasksPage implements OnInit {
     this.loadTasks();
   }
 
+  // ─── Aplicar filtro ──────────────────────────────────────
+  setFilter(filter: 'todas' | 'pendiente' | 'realizada' | 'faltante') {
+    this.activeFilter = filter;
+    this.loadTasks();
+  }
+
   loadTasks() {
     this.tasks = this.taskService.getTasks();
     const week = this.weeks[this.selectedWeek];
 
-    this.filteredTasks = this.tasks.filter(t => {
+    // Primero filtra por semana
+    let weekTasks = this.tasks.filter(t => {
       const date = new Date(t.createdAt);
       return date >= week.startDate && date <= week.endDate;
     });
+
+    // Luego filtra por estado si hay uno activo
+    if (this.activeFilter !== 'todas') {
+      weekTasks = weekTasks.filter(t => t.status === this.activeFilter);
+    }
+
+    this.filteredTasks = weekTasks;
   }
 
   getProgress(): number {
-    if (this.filteredTasks.length === 0) return 0;
+    const allWeekTasks = this.taskService.getTasks().filter(t => {
+      const week = this.weeks[this.selectedWeek];
+      const date = new Date(t.createdAt);
+      return date >= week.startDate && date <= week.endDate;
+    });
+    if (allWeekTasks.length === 0) return 0;
     return Math.round(
-      (this.filteredTasks.filter(t => t.status === 'realizada').length /
-        this.filteredTasks.length) * 100
+      (allWeekTasks.filter(t => t.status === 'realizada').length /
+        allWeekTasks.length) * 100
     );
   }
 
@@ -108,7 +130,11 @@ export class TasksPage implements OnInit {
   }
 
   countByStatus(status: string): number {
-    return this.filteredTasks.filter(t => t.status === status).length;
+    const week = this.weeks[this.selectedWeek];
+    return this.taskService.getTasks().filter(t => {
+      const date = new Date(t.createdAt);
+      return t.status === status && date >= week.startDate && date <= week.endDate;
+    }).length;
   }
 
   countByStatusAndWeek(weekIndex: number, status: string): number {
@@ -223,12 +249,12 @@ export class TasksPage implements OnInit {
       });
       this.loadTasks();
     }
-  }  
+  }
 
   async deleteTask(id: string) {
     const alert = await this.alertCtrl.create({
       header: '¿Eliminar tarea?',
-      message: 'Esta acción no se puede deshacer.',
+      message: '¿Estás seguro de eliminar esta tarea?',
       buttons: [
         { text: 'Cancelar', role: 'cancel' },
         {

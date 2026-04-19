@@ -37,6 +37,31 @@
         </div>
       </div>
     </div>
+
+    <!-- ─── Barra de filtros ─────────────────────────────── -->
+    <div class="filter-bar">
+      <button class="filter-btn"
+        [class.active]="activeFilter === 'todas'"
+        (click)="setFilter('todas')">
+        Todas
+      </button>
+      <button class="filter-btn yellow"
+        [class.active]="activeFilter === 'pendiente'"
+        (click)="setFilter('pendiente')">
+        ⏳ Pendientes
+      </button>
+      <button class="filter-btn green"
+        [class.active]="activeFilter === 'realizada'"
+        (click)="setFilter('realizada')">
+        ✅ Realizadas
+      </button>
+      <button class="filter-btn red"
+        [class.active]="activeFilter === 'faltante'"
+        (click)="setFilter('faltante')">
+        ❌ Faltantes
+      </button>
+    </div>
+
   </div>
 
   <div class="body">
@@ -67,7 +92,6 @@
               {{ countByStatusAndWeek(i, 'faltante') }}
             </span>
           </div>
-
           <ion-icon
             [name]="selectedWeek === i ? 'chevron-up-outline' : 'chevron-down-outline'"
             class="chevron-icon">
@@ -78,7 +102,6 @@
       <div class="folder-body" *ngIf="selectedWeek === i">
 
         <div class="calendar-grid">
-
           <div class="calendar-day"
                *ngFor="let day of getDaysOfWeek(week)"
                [class.today]="isToday(day.date)">
@@ -116,7 +139,6 @@
                 <div class="task-name">{{ task.title }}</div>
               </div>
 
-              <!-- botón editar -->
               <ion-icon name="create-outline"
                 class="edit-icon"
                 (click)="editTask(task); $event.stopPropagation()">
@@ -136,11 +158,12 @@
             </div>
 
           </div>
-
         </div>
 
         <div *ngIf="filteredTasks.length === 0" class="empty-state">
-          No hay tareas esta semana
+          <ion-icon name="search-outline"></ion-icon>
+          <p *ngIf="activeFilter === 'todas'">No hay tareas esta semana</p>
+          <p *ngIf="activeFilter !== 'todas'">No hay tareas {{ activeFilter === 'pendiente' ? 'pendientes' : activeFilter === 'realizada' ? 'realizadas' : 'faltantes' }} esta semana</p>
         </div>
 
         <div class="add-btn" (click)="addTask()">+ Nueva tarea</div>

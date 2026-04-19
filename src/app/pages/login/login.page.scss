@@ -9,12 +9,10 @@ ion-content {
   align-items: center;
   justify-content: center;
   padding: 24px;
-
   position: relative;
   overflow: hidden;
 }
 
-/* 🔥 CÍRCULOS DECORATIVOS */
 .background::before,
 .background::after {
   content: '';
@@ -39,22 +37,16 @@ ion-content {
   right: -100px;
 }
 
-/* 🧾 TARJETA */
 .card {
   background: #F0EFF9;
   border-radius: 24px;
   padding: 40px 28px 32px;
   width: 100%;
   max-width: 360px;
-
-  /* 🔥 EFECTO FLOTANTE */
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-
-  /* 🎬 ANIMACIÓN ENTRADA */
   animation: fadeSlideUp 0.8s ease;
 }
 
-/* 👤 LOGO */
 .avatar-container {
   display: flex;
   flex-direction: column;
@@ -63,25 +55,31 @@ ion-content {
 }
 
 .logo-icon {
-  width: 80px;
-  height: 80px;
+  width: 100px;
+  height: 100px;
   background: #534AB7;
-  border-radius: 20px;
+  border-radius: 24px;               
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 12px;
-
-  /* 🎬 ANIMACIÓN LOGO */
+  margin-bottom: 16px;
   animation: popIn 0.6s ease;
+  box-shadow: 0 8px 20px rgba(83, 74, 183, 0.4);  
+
+  img {
+    width: 72px;
+    height: 72px;
+    object-fit: contain;
+  }
 }
 
 .app-name {
-  font-size: 22px;
-  font-weight: 700;
+  font-size: 24px;                   
+  font-weight: 800;                  
   color: #534AB7;
   margin: 0;
   text-align: center;
+  letter-spacing: -0.5px;
 }
 
 .app-subtitle {
@@ -91,7 +89,6 @@ ion-content {
   text-align: center;
 }
 
-/* 🧾 TÍTULO */
 .title {
   text-align: center;
   font-size: 15px;
@@ -102,7 +99,6 @@ ion-content {
   margin-bottom: 20px;
 }
 
-/* 🧾 INPUTS */
 .input-item {
   --background: white;
   --border-radius: 50px;
@@ -110,14 +106,11 @@ ion-content {
   --inner-padding-end: 16px;
   margin-bottom: 14px;
   border-radius: 50px;
-
   --color: #333;
   --placeholder-color: #999;
-
   transition: all 0.3s ease;
 }
 
-/* 🎬 EFECTO FOCUS INPUT */
 .input-item:focus-within {
   transform: scale(1.02);
   box-shadow: 0 0 10px rgba(83, 74, 183, 0.3);
@@ -129,7 +122,6 @@ ion-content {
   margin-right: 8px;
 }
 
-/* 🔘 BOTÓN */
 .login-btn {
   margin-top: 24px;
   --background: #534AB7;
@@ -140,40 +132,12 @@ ion-content {
   font-weight: 600;
   letter-spacing: 1px;
   text-transform: uppercase;
-
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-/* 🎬 EFECTO CLICK BOTÓN */
 .login-btn:active {
   transform: scale(0.97);
   box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-}
-
-/* 🎬 KEYFRAMES */
-@keyframes fadeSlideUp {
-  from {
-    opacity: 0;
-    transform: translateY(40px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes popIn {
-  0% {
-    transform: scale(0.6);
-    opacity: 0;
-  }
-  80% {
-    transform: scale(1.1);
-  }
-  100% {
-    transform: scale(1);
-    opacity: 1;
-  }
 }
 
 .register-btn {
@@ -185,4 +149,15 @@ ion-content {
   --padding-bottom: 14px;
   font-size: 15px;
   font-weight: 600;
+}
+
+@keyframes fadeSlideUp {
+  from { opacity: 0; transform: translateY(40px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes popIn {
+  0%   { transform: scale(0.6); opacity: 0; }
+  80%  { transform: scale(1.1); }
+  100% { transform: scale(1);   opacity: 1; }
 }
