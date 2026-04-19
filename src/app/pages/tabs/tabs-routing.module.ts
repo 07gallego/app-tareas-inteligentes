@@ -16,6 +16,10 @@ const routes: Routes = [
         loadComponent: () => import('../calendar/calendar.page').then(m => m.CalendarPage)
       },
       {
+        path: 'stats', // 👈 AÑADIDO
+        loadComponent: () => import('../stats/stats.page').then(m => m.StatsPage)
+      },
+      {
         path: 'settings',
         loadComponent: () => import('../settings/settings.page').then(m => m.SettingsPage)
       },

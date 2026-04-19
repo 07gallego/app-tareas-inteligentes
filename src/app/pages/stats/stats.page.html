@@ -1,0 +1,142 @@
+<ion-content [fullscreen]="true" class="ion-no-padding">
+
+  <div class="header">
+    <div class="avatar">{{ username.substring(0,2).toUpperCase() }}</div>
+    <h2 class="username">{{ username }}</h2>
+    <p class="subtitle">Estadísticas de tareas</p>
+  </div>
+
+  <div class="body">
+
+    <!-- Resumen general -->
+    <div class="section">
+      <p class="section-title">Resumen general</p>
+
+      <div class="summary-grid">
+        <div class="summary-card total">
+          <span class="summary-number">{{ totalTasks }}</span>
+          <span class="summary-label">Total</span>
+        </div>
+        <div class="summary-card green">
+          <span class="summary-number">{{ totalRealizadas }}</span>
+          <span class="summary-label">Realizadas</span>
+        </div>
+        <div class="summary-card yellow">
+          <span class="summary-number">{{ totalPendientes }}</span>
+          <span class="summary-label">Pendientes</span>
+        </div>
+        <div class="summary-card red">
+          <span class="summary-number">{{ totalFaltantes }}</span>
+          <span class="summary-label">Faltantes</span>
+        </div>
+      </div>
+
+      <!-- 🔥 NUEVO PROGRESO CIRCULAR -->
+      <div class="global-progress">
+
+        <div class="progress-header">
+          <span class="progress-label">Progreso global</span>
+          <span class="progress-percent">{{ globalPercent }}%</span>
+        </div>
+
+        <div class="circle-container">
+          <div class="circle" [style.--percent]="globalPercent">
+            <span>{{ globalPercent }}%</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Gráfica de barras por semana -->
+    <div class="section">
+      <p class="section-title">Tareas por semana</p>
+
+      <div *ngIf="totalTasks === 0" class="empty-state">
+        <ion-icon name="bar-chart-outline"></ion-icon>
+        <p>Aún no hay datos</p>
+      </div>
+
+      <div *ngIf="totalTasks > 0" class="bar-chart">
+        <div *ngFor="let week of weekStats" class="bar-group">
+          <div class="bars">
+            <div class="bar green"  [style.height]="getBarHeight(week.realizadas)"></div>
+            <div class="bar yellow" [style.height]="getBarHeight(week.pendientes)"></div>
+            <div class="bar red"    [style.height]="getBarHeight(week.faltantes)"></div>
+          </div>
+          <span class="bar-label">{{ week.label }}</span>
+          <span class="bar-total">{{ week.total }}</span>
+        </div>
+      </div>
+
+      <div class="legend" *ngIf="totalTasks > 0">
+        <span class="legend-item"><span class="dot green"></span> Realizadas</span>
+        <span class="legend-item"><span class="dot yellow"></span> Pendientes</span>
+        <span class="legend-item"><span class="dot red"></span> Faltantes</span>
+      </div>
+    </div>
+
+    <!-- Prioridad -->
+    <div class="section">
+      <p class="section-title">Por prioridad</p>
+
+      <div *ngIf="totalTasks === 0" class="empty-state">
+        <ion-icon name="flag-outline"></ion-icon>
+        <p>Aún no hay datos</p>
+      </div>
+
+      <div *ngIf="totalTasks > 0">
+        <div class="priority-row">
+          <div class="priority-info">
+            <span class="priority-dot red"></span>
+            <span class="priority-name">Alta</span>
+            <span class="priority-count">{{ altaCount }}</span>
+          </div>
+          <div class="priority-track">
+            <div class="priority-fill red" [style.width]="getPriorityWidth(altaCount)"></div>
+          </div>
+        </div>
+
+        <div class="priority-row">
+          <div class="priority-info">
+            <span class="priority-dot yellow"></span>
+            <span class="priority-name">Media</span>
+            <span class="priority-count">{{ mediaCount }}</span>
+          </div>
+          <div class="priority-track">
+            <div class="priority-fill yellow" [style.width]="getPriorityWidth(mediaCount)"></div>
+          </div>
+        </div>
+
+        <div class="priority-row">
+          <div class="priority-info">
+            <span class="priority-dot green"></span>
+            <span class="priority-name">Baja</span>
+            <span class="priority-count">{{ bajaCount }}</span>
+          </div>
+          <div class="priority-track">
+            <div class="priority-fill green" [style.width]="getPriorityWidth(bajaCount)"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Categorías -->
+    <div class="section" *ngIf="categorias.length > 0">
+      <p class="section-title">Por categoría</p>
+
+      <div *ngFor="let cat of categorias" class="cat-row">
+        <div class="cat-info">
+          <span class="cat-dot" [style.background]="cat.color"></span>
+          <span class="cat-name">{{ cat.name }}</span>
+          <span class="cat-count">{{ cat.count }}</span>
+        </div>
+        <div class="cat-track">
+          <div class="cat-fill" [style.width]="getCatWidth(cat.count)" [style.background]="cat.color"></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</ion-content>

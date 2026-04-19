@@ -41,6 +41,10 @@ const routes: Routes = [
     path: 'settings',
     redirectTo: 'tabs/settings',
     pathMatch: 'full'
+  },
+  {
+    path: 'stats',
+    loadChildren: () => import('./pages/stats/stats.module').then( m => m.StatsPageModule)
   }
 ];
 
